@@ -24,9 +24,17 @@ module APND
       end
     end
 
+  end
+
+  #
+  # Daemon::ServerConnection links APND::Daemon::Protocol to EM
+  #
+  class Daemon::ServerConnection < ::EventMachine::Connection
+
     def enqueue_notification(n)
       n.save!
     end
 
   end
+
 end

@@ -11,5 +11,9 @@ module APND
     #
     attr_accessor :queue
 
+    def enqueue_notification(n)
+      queue.push(n)
+    end
+
   end
 end

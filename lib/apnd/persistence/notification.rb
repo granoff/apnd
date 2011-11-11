@@ -8,5 +8,9 @@ module APND
     set_collection_name :apnd_notifications
 
     key :token
+    key :alert
+    key :badge
+    key :sound
+    key :custom
   end
 end
