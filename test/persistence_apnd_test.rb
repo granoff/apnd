@@ -58,7 +58,23 @@ class APNDPersistenceTest < Test::Unit::TestCase
           assert_equal 1, APND::Notification.all.count
         end
       end
+    end
+    
+    context "Performance" do
+      setup do
+        @daemon = TestPersistenceDaemon.new
+        MongoMapper.database.collections.each(&:remove)
+        
+        1000.times { @daemon.receive_data(@@bytes) }
+        @daemon.unbind
+      end
 
+      should "process 1000 notifications" do
+        assert_equal 1000, APND::Notification.all.count
+        
+        @daemon.process_notifications!
+        assert_equal 0, APND::Notification.all.count
+      end
     end
   end
 
