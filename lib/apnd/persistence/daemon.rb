@@ -13,7 +13,7 @@ module APND
             begin
               APND.logger "Sending notification for #{notification.token}"
               @apple.write(notification.to_bytes)
-              notification.destroy
+              #notification.destroy
            rescue Errno::EPIPE, OpenSSL::SSL::SSLError
               APND.logger "Error, notification will be sent next time around"
               @apple.reconnect!
@@ -21,6 +21,8 @@ module APND
               APND.logger "Error: #{error}"
             end
           end
+          ids = pending.map { |p| p._id }
+          APND::Notification.where(:id => { :$in => ids }).remove
           pending = APND::Notification.limit(100)
         end
         @apple.disconnect!
